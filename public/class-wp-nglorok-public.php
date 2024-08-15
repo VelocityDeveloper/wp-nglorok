@@ -51,6 +51,7 @@ class Wp_Nglorok_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->register_page_shortcodes();
 
 	}
 
@@ -159,5 +160,15 @@ class Wp_Nglorok_Public {
 			}
 		}
 		return $template;
+	}
+
+	// Register Page Shortcode 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-nglorok-admin.php';
+	public function register_page_shortcodes() {
+		$list_pages = [
+			'page-billing' => 'Billing',
+		];
+		foreach ($list_pages as $key => $value) {
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/page/'.$key.'.php';
+		}
 	}
 }
