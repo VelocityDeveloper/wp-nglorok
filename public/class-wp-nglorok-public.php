@@ -71,9 +71,27 @@ class Wp_Nglorok_Public {
 		 * The Wp_Nglorok_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
-		 */
+		*/
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-nglorok-public.css', array(), $this->version, 'all' );
+		if(get_page_template_slug() !== 'wp-nglorok-app')
+		return false;
+
+		$assets_css = [
+			'feather' 				=> 'vendors/feather/feather.css',
+			'themify' 				=> 'vendors/ti-icons/css/themify-icons.css',
+			'bundle' 				=> 'vendors/css/vendor.bundle.base.css',
+			'font-awesome' 			=> 'vendors/font-awesome/css/font-awesome.min.css',
+			'materialdesignicons' 	=> 'vendors/mdi/css/materialdesignicons.min.css',
+			// 'dataTables.bootstrap5' => 'vendors/datatables.net-bs5/dataTables.bootstrap5.css',
+			'themify-icons' 		=> 'vendors/ti-icons/css/themify-icons.css',
+			'select.dataTables' 	=> 'js/select.dataTables.min.css',
+			'style'					=> 'css/style.css',
+		];
+		foreach ($assets_css as $key => $css_path) {
+			wp_enqueue_style( $this->plugin_name.'-'.$key, plugin_dir_url( __FILE__ ) . 'assets/'.$css_path, array(), $this->version, 'all' );
+		}
+
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/wp-nglorok-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -96,8 +114,50 @@ class Wp_Nglorok_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-nglorok-public.js', array( 'jquery' ), $this->version, false );
+		if(get_page_template_slug() !== 'wp-nglorok-app')
+		return false;
+
+		$assets_js = [
+			'bundle' 				=> 'vendors/js/vendor.bundle.base.js',
+			'chart.umd'				=> 'vendors/chart.js/chart.umd.js',
+			'dataTables'			=> 'vendors/datatables.net/jquery.dataTables.js',
+			'dataTables-bootstrap5'	=> 'vendors/datatables.net-bs5/dataTables.bootstrap5.js',
+			'dataTables-select' 	=> 'js/dataTables.select.min.js',
+			'off-canvas'			=> 'js/off-canvas.js',
+			'template'				=> 'js/template.js',
+			'settings'				=> 'js/settings.js',
+			'todolist'				=> 'js/todolist.js',
+			'jquery.cookie'			=> 'js/jquery.cookie.js',
+			'dashboard'				=> 'js/dashboard.js',
+		];
+		foreach ($assets_js as $key => $js_path) {
+			wp_enqueue_script( $this->plugin_name.'-'.$key, plugin_dir_url( __FILE__ ) . 'assets/'.$js_path, array('jquery'), $this->version, false );
+		}
+
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/wp-nglorok-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 
+	//hide admin bar
+	public function hide_admin_bar(){
+		if (get_page_template_slug() === 'wp-nglorok-app') {
+			return false;
+		}
+		return true;
+	}
+
+	//Register Page template
+	public function page_templates($post_templates){
+		$post_templates['wp-nglorok-app'] = __( 'App Nglorok', 'wp-nglorok' );
+		return $post_templates;
+	}
+	public function template_include($template){
+		if ( is_singular() ) {
+			$page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
+			if ( 'wp-nglorok-app' === $page_template ) {
+				$template = plugin_dir_path( __FILE__ ) . '/page-app.php';
+			}
+		}
+		return $template;
+	}
 }

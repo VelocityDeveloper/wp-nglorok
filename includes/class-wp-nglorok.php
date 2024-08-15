@@ -170,8 +170,11 @@ class Wp_Nglorok {
 
 		$plugin_public = new Wp_Nglorok_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles', 50 );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_filter( 'template_include', $plugin_public, 'template_include' );
+		$this->loader->add_filter( 'theme_page_templates', $plugin_public, 'page_templates' );
+		$this->loader->add_filter( 'show_admin_bar', $plugin_public, 'hide_admin_bar' );
 
 	}
 
