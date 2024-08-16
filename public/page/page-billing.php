@@ -19,22 +19,19 @@ class Page_Billing {
 
     public function header() {
         ob_start();
+        $modal_filter_date = new Wp_Nglorok_Modal('filterDateModal', 'Tanggal Masuk', $this->form_filter_date(), false, 'Tutup');
         ?>
         
         <div class="d-flex justify-content-between mb-2">
             <h1 class="h2">Billing Data</h1>
             <div class="d-flex">
-                <button type="button" class="btn btn-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#filterDateModal">
-                    <i class="fa fa-filter" aria-hidden="true"></i> Date
-                </button>
+                <?php echo $modal_filter_date->render(); ?>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#filterJenisModal">
                     <i class="fa fa-filter" aria-hidden="true"></i> Filter
                 </button>
             </div>
         </div>
         <?php
-        Wp_Nglorok_Helpers::modal('filterDateModal', 'Tanggal Masuk', $this->form_filter_date(), '');
-        Wp_Nglorok_Helpers::modal('filterJenisModal', 'Filter', $this->form_filter_jenis(), '');
         return ob_get_clean();
     }
 
@@ -59,18 +56,12 @@ class Page_Billing {
         LIMIT 10
         ";
         $results = $wpdb->get_results($query, ARRAY_A);
-
-        // Inisialisasi variabel
-        $totalbulan = [];
-
-        // Loop hasil query dan proses data
-
         ob_start();
         ?>
         <div class="table-responsive">
             <table class="table table-striped">
-                <tbody>
-                    <tr>
+                <thead>
+                <tr>
                         <th>No</th>
                         <th>Jenis</th>
                         <th>Nama Web</th>
@@ -91,9 +82,9 @@ class Page_Billing {
                         <th>Dikerjakan Oleh</th>
                         <th></th>
                     </tr>
-                    <?php foreach ($results as $value) { 
-                        // echo '<pre>'.print_r($value, true).'</pre>';
-                        ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($results as $value) { ?>
                     <tr>
                         <td style="font-size:12px;text-align:center;"><input class="tanda" type="checkbox" kode=""></td>
                         <td><?php echo $value['jenis']; ?></td>

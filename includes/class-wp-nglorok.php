@@ -137,6 +137,11 @@ class Wp_Nglorok {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wp-nglorok-public.php';
 
+		/**
+		 * The class to load all components
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/components/class-wp-nglorok-modal.php';
+
 		$this->loader = new Wp_Nglorok_Loader();
 
 	}
