@@ -120,6 +120,11 @@ class Wp_Nglorok {
 		 * The class responsible for defining user profile.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-profile.php';
+		 
+		/*
+		* The class Wp_Nglorok_Menu
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-menu.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -185,6 +190,7 @@ class Wp_Nglorok {
 		$this->loader->add_filter( 'template_include', $plugin_public, 'template_include' );
 		$this->loader->add_filter( 'theme_page_templates', $plugin_public, 'page_templates' );
 		$this->loader->add_filter( 'show_admin_bar', $plugin_public, 'hide_admin_bar' );
+		$this->loader->add_action( 'after_setup_theme', $plugin_public, 'register_nav_menu' );
 
 	}
 
