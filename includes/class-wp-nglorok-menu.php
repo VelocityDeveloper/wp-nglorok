@@ -31,7 +31,7 @@ class Wp_Nglorok_Menu {
 						'title'		=> 'Lead Order',
 						'role'		=> ['billing'],
 					],
-					'lead_iklan' => [
+					'leadads' => [
 						'title'		=> 'Lead Iklan',
 						'role'		=> ['billing'],
 					],
@@ -42,7 +42,7 @@ class Wp_Nglorok_Menu {
 				'icon'		=> 'fa fa-tags',
 				'role'		=> ['billing'],
 			],
-			'jumlah_form' => [
+			'form'	=> [
 				'title'		=> 'Jumlah Kirim Form',
 				'icon'		=> 'fa fa-file-text-o',
 				'role'		=> ['billing'],
@@ -57,7 +57,7 @@ class Wp_Nglorok_Menu {
 				'icon'		=> 'fa fa-info-circle',
 				'role'		=> ['billing'],
 				'submenu'	=> [
-					'data_cuti' => [
+					'kelola_cuti' => [
 						'title'		=> 'Data Cuti',
 						'role'		=> ['billing'],
 					],

@@ -121,9 +121,9 @@ class Wp_Nglorok {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-profile.php';
 		 
-		/*
+		/**
 		* The class Wp_Nglorok_Menu
-		 */
+		*/
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-menu.php';
 
 		/**

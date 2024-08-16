@@ -34,8 +34,43 @@ class Wp_Nglorok_DefaultPage {
         ),
         array(
             'slug'      => 'leadads',
-            'title'     => 'Lead Ads',
+            'title'     => 'Lead Iklan',
             'content'   => '[page_leadads]'
+        ),
+        array(
+            'slug'      => 'iklan_google_per_bulan',
+            'title'     => 'Iklan Google per bulan',
+            'content'   => '[page_iklan_google_per_bulan]'
+        ),
+        array(
+            'slug'      => 'form',
+            'title'     => 'Jumlah Form',
+            'content'   => '[page_form]'
+        ),
+        array(
+            'slug'      => 'rincian_transaksi_grafik',
+            'title'     => 'Rincian Transaksi Grafik',
+            'content'   => '[page_rincian_transaksi_grafik]'
+        ),
+        array(
+            'slug'      => 'kelola_cuti',
+            'title'     => 'Data Cuti',
+            'content'   => '[page_kelola_cuti]'
+        ),
+        array(
+            'slug'      => 'jurnal',
+            'title'     => 'Jurnal',
+            'content'   => '[page_jurnal]'
+        ),
+        array(
+            'slug'      => 'pemakaian_themes',
+            'title'     => 'Pemakaian Themes',
+            'content'   => '[page_pemakaian_themes]'
+        ),
+        array(
+            'slug'      => 'peningkatan_order_cs',
+            'title'     => 'Peningkatan Order CS',
+            'content'   => '[page_peningkatan_order_cs]'
         ),
     );
 
@@ -55,6 +90,7 @@ class Wp_Nglorok_DefaultPage {
             'post_status'   => 'publish',
             'post_type'     => 'page',
             'guid'          => $slug,
+            'post_name'     => $slug,
             'page_template' => 'wp-nglorok-app'
         ));
 
