@@ -81,7 +81,8 @@ class Wp_Nglorok_Menu {
 	}
 
 	public static function display(){
-		$site = get_site_url();
+		$permalink	= get_the_permalink();
+		$site		= get_site_url();
 
 		echo '<ul class="nav">';
 			foreach( self::menu() as $slug => $menu):
@@ -89,11 +90,11 @@ class Wp_Nglorok_Menu {
 				$id_menu = $slug!=='#'?$slug:uniqid();
 
 				// link
-				$link = $site.'/'.$slug;
+				$link = $site.'/'.$slug.'/';
 				if(isset($menu['submenu']) && !empty($menu['submenu'])){
 					$link = '#sub-'.$id_menu;
 				} elseif ($slug=='dashboard'){
-					$link = $site;
+					$link = $site.'/';
 				}
 
 				//attribut link
@@ -106,7 +107,8 @@ class Wp_Nglorok_Menu {
 				}
 
 				//Parent Menu
-				echo '<li class="nav-item">';
+				$parent_active = ($link==$permalink)?'active':'';
+				echo '<li class="nav-item '.$parent_active.'">';
 					echo '<a class="nav-link" '.implode(" ",$attr_link).'>';
 
 						echo $menu['icon']?'<i class="'.$menu['icon'].' menu-icon"></i>':'';
@@ -121,6 +123,7 @@ class Wp_Nglorok_Menu {
 
 					//submenu
 					if(isset($menu['submenu']) && !empty($menu['submenu'])){
+
 						echo '<div class="collapse" id="sub-'.$id_menu.'">';
 							echo '<ul class="nav flex-column sub-menu ps-4">';
 								foreach( $menu['submenu'] as $sub_slug => $sub_menu):
@@ -135,6 +138,7 @@ class Wp_Nglorok_Menu {
 								endforeach;
 							echo '</ul>';
 						echo '</div>';
+						
 					}
 
 				echo '</li>';
