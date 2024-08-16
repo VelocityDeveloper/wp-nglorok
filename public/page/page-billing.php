@@ -40,6 +40,7 @@ class Page_Billing {
             ON {$wpdb->prefix}webhost.id_paket = {$wpdb->prefix}paket.id_paket
             ORDER BY {$wpdb->prefix}cs_main_project.tgl_masuk DESC 
             LIMIT 10
+
         ";
         $results = $wpdb->get_results($query, ARRAY_A);
 
@@ -96,11 +97,11 @@ class Page_Billing {
                 <td><?php echo $value['trf']; ?></td>
                 <td><?php echo $value['tgl_masuk']; ?></td>
                 <td><?php echo $value['tgl_deadline']; ?></td>
-                <td><?php echo $value['biaya']; ?></td>
-                <td><?php echo $value['dibayar']; ?></td>
-                <td><?php echo $value['biaya'] - $value['dibayar']; ?></td>
+                <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya']); ?></td>
+                <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['dibayar']); ?></td>
+                <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya'] - $value['dibayar']); ?></td>
                 <td> </td>
-                <td>081255345823, 082357535302</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td><?php echo $value['hp']; ?></td>

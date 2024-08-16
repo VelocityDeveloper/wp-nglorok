@@ -112,6 +112,11 @@ class Wp_Nglorok {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-i18n.php';
 
 		/**
+		 * The class responsible for defining all function that occur in the dashboard.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-helpers.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-nglorok-admin.php';
