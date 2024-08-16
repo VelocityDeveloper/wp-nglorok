@@ -25,11 +25,37 @@ class Wp_Nglorok_Helpers {
 
 
 	public static function convert_to_rupiah( $number ) {
+		$number = (int) $number;
 		return 'Rp ' . number_format( $number, 0, ',', '.' );
 	}
 
 	public static function convert_to_dmY( $date ) {
 		return date( 'd-m-Y', strtotime( $date ) );
+	}
+
+	public static function convert_to_dmonY( $date ) {
+		$months = [
+			'01' => 'Jan',
+			'02' => 'Feb',
+			'03' => 'Mar',
+			'04' => 'Apr',
+			'05' => 'Mei',
+			'06' => 'Jun',
+			'07' => 'Jul',
+			'08' => 'Agt',
+			'09' => 'Sep',
+			'10' => 'Okt',
+			'11' => 'Nov',
+			'12' => 'Des'
+		];
+	
+		$timestamp = strtotime( $date );
+		$day = date( 'd', $timestamp );
+		$month = date( 'm', $timestamp );
+		$year = date( 'Y', $timestamp );
+	
+		// Format the date as 'tanggal d M Y'
+		return $day . ' ' . $months[ $month ] . ' ' . $year;
 	}
 
 }
