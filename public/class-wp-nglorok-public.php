@@ -162,6 +162,14 @@ class Wp_Nglorok_Public {
 		return $template;
 	}
 
+	//register menu
+	public function register_nav_menu(){
+		register_nav_menus( array(
+	    	'billing_menu' => __( 'Billing', 'wp-nglorok' ),
+	    	'webmaster_menu'  => __( 'Webmaster', 'wp-nglorok' ),
+		) );
+	}
+
 	// Register Page Shortcode 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-nglorok-admin.php';
 	public function register_page_shortcodes() {
 		$list_pages = [

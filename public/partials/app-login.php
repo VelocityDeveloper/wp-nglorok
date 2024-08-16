@@ -1,10 +1,9 @@
 <div class="d-flex justify-content-center align-items-center content-wrapper" style="height: 100vh;">
     <div class="card" style="min-width: 400px;">
         <div class="card-body">
-            <div class="text-center mb-3">
+            <div class="text-center mb-5">
                 <img src="<?php echo WP_NGLOROK_PLUGIN_URL;?>public/assets/images/vdlogo.jpg" width="200" class="mx-auto" alt="logo" />
             </div>
-            <p class="card-title">Login</p>
             <?php
                 $args = array(
                     'echo'            => true,
