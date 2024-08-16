@@ -117,7 +117,12 @@ class Wp_Nglorok {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-helpers.php';
 
 		/**
-		 * The class Wp_Nglorok_Menu
+		 * The class responsible for defining user profile.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-profile.php';
+		 
+		/*
+		* The class Wp_Nglorok_Menu
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-nglorok-menu.php';
 

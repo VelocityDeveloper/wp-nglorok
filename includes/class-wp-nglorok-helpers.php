@@ -26,11 +26,11 @@ class Wp_Nglorok_Helpers {
 
 	public static function convert_to_rupiah( $number ) {
 		$number = (int) $number;
-		return 'Rp ' . number_format( $number, 0, ',', '.' );
+		echo 'Rp ' . number_format( $number, 0, ',', '.' );
 	}
 
 	public static function convert_to_dmY( $date ) {
-		return date( 'd-m-Y', strtotime( $date ) );
+		echo date( 'd-m-Y', strtotime( $date ) );
 	}
 
 	public static function convert_to_dmonY( $date ) {
@@ -55,7 +55,32 @@ class Wp_Nglorok_Helpers {
 		$year = date( 'Y', $timestamp );
 	
 		// Format the date as 'tanggal d M Y'
-		return $day . ' ' . $months[ $month ] . ' ' . $year;
+		echo $day . ' ' . $months[ $month ] . ' ' . $year;
+	}
+
+	public static function modal( $id='', $title='', $content='', $footer='' ) {
+		// ob_start();
+		?>
+		<div class="modal fade" id="<?php echo $id; ?>" tabindex="-1" aria-labelledby="<?php echo $id; ?>Label" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="<?php echo $id; ?>Label"><?php echo $title; ?></h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<?php echo $content; ?>
+					</div>
+					<?php if( !empty( $footer ) ) { ?>
+					<div class="modal-footer">
+						<?php echo $footer; ?>
+					</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+		<?php
+		// return ob_get_clean();
 	}
 
 }
