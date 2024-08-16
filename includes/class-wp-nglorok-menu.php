@@ -27,7 +27,7 @@ class Wp_Nglorok_Menu {
 				'icon'		=> 'icon-bar-graph',
 				'role'		=> ['billing'],
 				'submenu'	=> [
-					'lead_order' => [
+					'lead'	=> [
 						'title'		=> 'Lead Order',
 						'role'		=> ['billing'],
 					],

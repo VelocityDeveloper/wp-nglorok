@@ -29,5 +29,11 @@ class Wp_Nglorok_Activator {
      */
     public static function activate() {
         
+		/**
+		 * The class untuk membuat halaman.
+        */
+		require_once WP_NGLOROK_PLUGIN_DIR . 'admin/class-wp-nglorok-defaultpage.php';
+		$page_creator = new Wp_Nglorok_DefaultPage();
+        $page_creator->create_pages();
     }
 }
