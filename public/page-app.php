@@ -27,30 +27,36 @@ defined( 'ABSPATH' ) || exit;
 	<?php wp_head(); ?>
 </head>
 <body>
-    <div id="app" class="container-scroller">
 
-        <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-navbar.php'; ?>
+        <?php if(is_user_logged_in()): ?>
+            <div id="app" class="container-scroller">
 
-        <div class="container-fluid page-body-wrapper pt-0">
+                <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-navbar.php'; ?>
 
-            <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-sidebar.php'; ?>
+                <div class="container-fluid page-body-wrapper pt-0">
 
-            <div class="main-panel">
-                <div class="content-wrapper">
-                    <?php
-                    while ( have_posts() ) {
-                        the_post();
-                        the_content();
-                    }
-                    ?>
+                    <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-sidebar.php'; ?>
+
+                    <div class="main-panel">
+                        <div class="content-wrapper">
+                            <?php
+                            while ( have_posts() ) {
+                                the_post();
+                                the_content();
+                            }
+                            ?>
+                        </div>
+                        
+                        <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-footer.php'; ?>
+                    </div>
+
                 </div>
-                
-                <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-footer.php'; ?>
+
             </div>
-
-        </div>
-
-    </div>
+        <?php else: ?>
+            <?php require_once plugin_dir_path( __FILE__ ) . '/partials/app-login.php'; ?>
+        <?php endif; ?>
+        
     <?php wp_footer(); ?>
 </body>
 </html>
