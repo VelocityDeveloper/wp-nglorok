@@ -18,6 +18,16 @@ class Wp_Nglorok_DefaultPage {
             'content'   => '[page_dashboard]'
         ),
         array(
+            'slug'      => 'akun',
+            'title'     => 'Akun',
+            'content'   => '[edit-user]'
+        ),
+        array(
+            'slug'      => 'karyawan',
+            'title'     => 'Karyawan',
+            'content'   => '[page_karyawan]'
+        ),
+        array(
             'slug'      => 'billing',
             'title'     => 'Billing',
             'content'   => '[page_billing]'

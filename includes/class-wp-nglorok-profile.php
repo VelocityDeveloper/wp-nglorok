@@ -26,7 +26,7 @@ class Wp_Nglorok_Profile
 {
     private $prefix = '';
 
-    public function __construct()
+    public function init()
     {
         add_shortcode('edit-user', array($this, 'render_user_meta_form'));
         add_action('cmb2_init', array($this, 'register_user_frontend_form'));
@@ -37,7 +37,7 @@ class Wp_Nglorok_Profile
         $cmb_user = new_cmb2_box(array(
             'id'           => $this->prefix . 'user_frontend_form',
             'object_types' => array('user'), // Tipe objek adalah 'user'
-            'hookup'       => false,
+            'hookup'       => true,
             'save_fields'  => false, // Kami akan menyimpan field secara manual
         ));
 
@@ -60,8 +60,8 @@ class Wp_Nglorok_Profile
         ));
 
         $cmb_user->add_field(array(
-            'name'    => 'Tahun Masuk',
-            'id'      => $this->prefix . 'year',
+            'name'    => 'Tanggal Masuk',
+            'id'      => $this->prefix . 'tanggal_masuk',
             'type'    => 'text',
             'attributes' => [
                 'type' => 'date'
@@ -78,8 +78,8 @@ class Wp_Nglorok_Profile
         ));
 
         $cmb_user->add_field(array(
-            'name'    => 'Poto Profil',
-            'id'      => $this->prefix . 'poto_profil',
+            'name'    => 'Foto Profil',
+            'id'      => $this->prefix . 'foto_profil',
             'type'    => 'file',
         ));
     }
@@ -171,10 +171,24 @@ class Wp_Nglorok_Profile
 
         return true;
     }
+
+    function avatar($user_id=null){
+        if(empty($user_id)){
+            $user_id = get_current_user_id();
+        }
+
+        $foto = get_user_meta($user_id,'foto_profil',true);
+        $foto = $foto?$foto:WP_NGLOROK_PLUGIN_URL.'public/assets/images/ava.webp';
+
+        return $foto;
+
+    }
+
 }
 
 // Inisialisasi kelas
 $Wp_Nglorok_Profile = new Wp_Nglorok_Profile();
+$Wp_Nglorok_Profile->init();
 
 // Remove the action hook
 // remove_action('cmb2_init', array($Wp_Nglorok_Profile, 'register_user_frontend_form'));

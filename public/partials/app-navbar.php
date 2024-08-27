@@ -10,12 +10,16 @@
 
     <ul class="navbar-nav navbar-nav-right">      
       <li class="nav-item nav-profile dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-          <img src="<?php echo WP_NGLOROK_PLUGIN_URL;?>public/assets/images/faces/face28.jpg" alt="profile" />
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">          
+          <?php
+          $profil = new Wp_Nglorok_Profile();
+          ?>
+          <img src="<?php echo $profil->avatar();?>" alt="profile" />
         </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-          <a class="dropdown-item">
-            <i class="ti-settings text-primary"></i> Settings </a>
+          <a class="dropdown-item" href="<?php echo get_site_url(); ?>/akun">
+            <i class="ti-settings text-primary"></i> Settings
+          </a>
           <a class="dropdown-item" href="<?php echo wp_logout_url( get_site_url() ); ?>">
             <i class="ti-power-off text-primary"></i> Logout
           </a>
