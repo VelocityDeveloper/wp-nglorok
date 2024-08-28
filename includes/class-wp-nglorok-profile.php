@@ -32,6 +32,22 @@ class Wp_Nglorok_Profile
         add_action('cmb2_init', array($this, 'register_user_frontend_form'));
     }
 
+    public function divisi(){
+        
+        global $wpdb;
+        $result         = [];
+        $tb_karyawan    = $wpdb->prefix . 'divisi_karyawan';
+        $karyawan       = $wpdb->get_results("SELECT * FROM $tb_karyawan", ARRAY_A);
+
+        if (!empty($karyawan)) {
+            foreach ($karyawan as $row) {
+                $result[$row['divisi']] = $row['nama_divisi'];
+            }
+        }
+
+        return $result;
+    }
+
     public function register_user_frontend_form()
     {
         $cmb_user = new_cmb2_box(array(
@@ -49,7 +65,7 @@ class Wp_Nglorok_Profile
 
         $cmb_user->add_field(array(
             'name'    => 'No Handphone',
-            'id'      => $this->prefix . 'phone_number',
+            'id'      => $this->prefix . 'number_handphone',
             'type'    => 'text',
         ));
 
@@ -61,7 +77,7 @@ class Wp_Nglorok_Profile
 
         $cmb_user->add_field(array(
             'name'    => 'Tanggal Masuk',
-            'id'      => $this->prefix . 'tanggal_masuk',
+            'id'      => $this->prefix . 'entry_date',
             'type'    => 'text',
             'attributes' => [
                 'type' => 'date'
@@ -78,9 +94,29 @@ class Wp_Nglorok_Profile
         ));
 
         $cmb_user->add_field(array(
+            'name'    => 'Divisi',
+            'id'      => $this->prefix . 'divisi',
+            'type'    => 'select',
+            'options' => $this->divisi(),
+        ));
+
+        $cmb_user->add_field(array(
+            'name'    => 'Status',
+            'id'      => $this->prefix . 'status',
+            'type'    => 'select',
+            'options' => array(
+                'aktif'  => 'Aktif',
+                'resign' => 'Resign',
+            ),
+        ));
+
+        $cmb_user->add_field(array(
             'name'    => 'Foto Profil',
-            'id'      => $this->prefix . 'foto_profil',
+            'id'      => $this->prefix . 'avatar',
             'type'    => 'file',
+            'options' => array(
+                'url' => false, // Hide the text input for the url
+            ),
         ));
     }
 
@@ -91,7 +127,7 @@ class Wp_Nglorok_Profile
         }
 
         // Current user
-        $user_id = get_current_user_id();
+        $user_id = isset($atts['user_id'])?absint( $atts['user_id'] ):get_current_user_id();
 
         // Use ID of metabox in wds_frontend_form_register
         $metabox_id = isset($atts['id']) ? esc_attr($atts['id']) : $this->prefix . 'user_frontend_form';
@@ -116,7 +152,7 @@ class Wp_Nglorok_Profile
             } else {
 
                 // Add notice of submission
-                $output .= '<div class="alert alert-success">' . __('Your profile has been updated successfully.', 'cmb2-user-submit') . '</div>';
+                $output .= '<div class="alert alert-success">' . __('Profile has been updated successfully.', 'cmb2-user-submit') . '</div>';
             }
         }
 
@@ -177,7 +213,7 @@ class Wp_Nglorok_Profile
             $user_id = get_current_user_id();
         }
 
-        $foto = get_user_meta($user_id,'foto_profil',true);
+        $foto = get_user_meta($user_id,'avatar',true);
         $foto = $foto?$foto:WP_NGLOROK_PLUGIN_URL.'public/assets/images/ava.webp';
 
         return $foto;

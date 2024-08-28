@@ -75,6 +75,11 @@ class Wp_Nglorok_Menu {
 					],
 				],
 			],
+			'karyawan' => [
+				'title'		=> 'Karyawan',
+				'icon'		=> 'mdi mdi-account-multiple',
+				'role'		=> ['billing'],
+			],
 			
 		];
 		return $menu;

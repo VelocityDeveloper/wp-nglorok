@@ -29,11 +29,12 @@ class Wp_Nglorok_Activator {
      */
     public static function activate() {
         
-		/**
-		 * The class untuk membuat halaman.
+        /**
+		 * The class untuk membuat table.
         */
-		require_once WP_NGLOROK_PLUGIN_DIR . 'admin/class-wp-nglorok-defaultpage.php';
-		$page_creator = new Wp_Nglorok_DefaultPage();
-        $page_creator->create_pages();
+		require_once WP_NGLOROK_PLUGIN_DIR . 'admin/class-wp-nglorok-defaultdb.php';
+		$db_creator = new Wp_Nglorok_Defaultdb();
+        $db_creator->create_table();
+
     }
 }

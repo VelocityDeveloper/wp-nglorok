@@ -174,6 +174,7 @@ class Wp_Nglorok_Public {
 	public function register_page_shortcodes() {
 		$list_pages = [
 			'page-billing' => 'Billing',
+			'page-karyawan' => 'Karyawan',
 		];
 		foreach ($list_pages as $key => $value) {
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/page/'.$key.'.php';

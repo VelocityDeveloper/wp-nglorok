@@ -16,7 +16,7 @@
           ?>
           <img src="<?php echo $profil->avatar();?>" alt="profile" />
         </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" style="margin-top:-1rem !important;" aria-labelledby="profileDropdown">
           <a class="dropdown-item" href="<?php echo get_site_url(); ?>/akun">
             <i class="ti-settings text-primary"></i> Settings
           </a>
