@@ -91,20 +91,20 @@ class Page_Billing {
                         <td><?php echo $value['nama_web']; ?></td>
                         <td><?php echo $value['paket']; ?></td>
                         <td><?php echo $value['deskripsi']; ?></td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_rupiah($value['trf']); ?></td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_dmonY($value['tgl_masuk']); ?></td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_dmonY($value['tgl_deadline']); ?></td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya']); ?></td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_rupiah($value['dibayar']); ?></td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya'] - $value['dibayar']); ?>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['trf']); ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_dmonY($value['tgl_masuk']); ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_dmonY($value['tgl_deadline']); ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya']); ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['dibayar']); ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya'] - $value['dibayar']); ?>
                         </td>
-                        <td><?php Wp_Nglorok_Helpers::convert_to_rupiah($value['saldo']); ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['saldo']); ?></td>
                         <td><?php echo $value['hp']; ?></td>
                         <td><?php echo $value['telegram']; ?></td>
                         <td><?php echo $value['hpads']; ?></td>
                         <td><?php echo $value['wa']; ?></td>
                         <td><?php echo $value['email']; ?></td>
-                        <td><?php echo $value['dikerjakan_oleh']; ?></td>
+                        <td><?php echo Wp_Nglorok_Helpers::get_user_names($value['dikerjakan_oleh']); ?></td>
                         <td>
                             <a href="index.php?pg=billing&amp;ac=edit&amp;id=<?php echo $value['id']; ?>'"
                                 class="btn btn-primary btn-sm text-white"><i class="fa fa-pencil" aria-hidden="true"></i>

@@ -26,11 +26,11 @@ class Wp_Nglorok_Helpers {
 
 	public static function convert_to_rupiah( $number ) {
 		$number = (int) $number;
-		echo 'Rp ' . number_format( $number, 0, ',', '.' );
+		return 'Rp ' . number_format( $number, 0, ',', '.' );
 	}
 
 	public static function convert_to_dmY( $date ) {
-		echo date( 'd-m-Y', strtotime( $date ) );
+		return date( 'd-m-Y', strtotime( $date ) );
 	}
 
 	public static function convert_to_dmonY( $date ) {
@@ -55,7 +55,21 @@ class Wp_Nglorok_Helpers {
 		$year = date( 'Y', $timestamp );
 	
 		// Format the date as 'tanggal d M Y'
-		echo $day . ' ' . $months[ $month ] . ' ' . $year;
+		return $day . ' ' . $months[ $month ] . ' ' . $year;
 	}
+
+    public static function get_user_names( string $input ) : string {
+        // Pisahkan input berdasarkan koma
+        $parts = explode(',', $input);
+		
+		foreach ($parts as $key => $value) {
+			// explode 	,10[100] menjadi 10 dan 100
+			$user_id = explode('[', $value)[0];
+			$parts[$key] = $user_id;
+		}
+
+        // Gabungkan kembali array menjadi string
+        return implode(',', $parts);
+    }
 
 }
