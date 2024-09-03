@@ -8,7 +8,7 @@
  *
  * @package    Wp_Nglorok
  * @subpackage Wp_Nglorok/includes
- */
+*/
 
 /**
  * Register all actions and filters for the plugin.
@@ -37,7 +37,7 @@ class Wp_Nglorok_Profile
         global $wpdb;
         $result         = [];
         $tb_karyawan    = $wpdb->prefix . 'divisi_karyawan';
-        $karyawan       = $wpdb->get_results("SELECT * FROM $tb_karyawan", ARRAY_A);
+        $karyawan       = $wpdb->get_results($wpdb->prepare("SELECT * FROM $tb_karyawan"),ARRAY_A);
 
         if (!empty($karyawan)) {
             foreach ($karyawan as $row) {
@@ -98,6 +98,12 @@ class Wp_Nglorok_Profile
             'id'      => $this->prefix . 'divisi',
             'type'    => 'select',
             'options' => $this->divisi(),
+        ));
+
+        $cmb_user->add_field(array(
+            'name'    => 'ID Karyawan',
+            'id'      => $this->prefix . 'id_karyawan',
+            'type'    => 'text',
         ));
 
         $cmb_user->add_field(array(

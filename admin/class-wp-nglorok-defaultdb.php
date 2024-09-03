@@ -52,12 +52,10 @@ class Wp_Nglorok_Defaultdb {
         foreach ($results as $row) {
             $idkaryawan[$row['jenis']] = explode(',', $row['id_karyawan_list']);
         }
-        $idkaryawan['webmaster_b'] = [10];
 
         // Data default untuk tabel divisi_karyawan
         $default_divisi_karyawan = [
-            'webmaster_b'       => 'Webmaster Biasa',
-            'webmaster'         => 'Webmaster Custom',
+            'webmaster'         => 'Webmaster',
             'project_manager'   => 'Project Manager',
             'client_support'    => 'Support',
             'keuangan'          => 'Keuangan',
