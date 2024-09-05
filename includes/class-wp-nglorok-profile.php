@@ -29,6 +29,7 @@ class Wp_Nglorok_Profile
     public function init()
     {
         add_shortcode('edit-user', array($this, 'render_user_meta_form'));
+        add_action('cmb2_admin_init', array($this, 'register_user_meta'));
         add_action('cmb2_init', array($this, 'register_user_frontend_form'));
     }
 
@@ -36,8 +37,8 @@ class Wp_Nglorok_Profile
         
         global $wpdb;
         $result         = [];
-        $tb_karyawan    = $wpdb->prefix . 'divisi_karyawan';
-        $karyawan       = $wpdb->get_results($wpdb->prepare("SELECT * FROM $tb_karyawan"),ARRAY_A);
+        $tb_karyawan    = $wpdb->prefix . 'wpng_divisi_karyawan';
+        $karyawan       = $wpdb->get_results("SELECT * FROM $tb_karyawan",ARRAY_A);
 
         if (!empty($karyawan)) {
             foreach ($karyawan as $row) {
@@ -48,18 +49,42 @@ class Wp_Nglorok_Profile
         return $result;
     }
 
+    public function register_user_meta(){        
+        $cmb_user = new_cmb2_box(array(
+            'id'           => $this->prefix . 'user_meta_form',
+            'object_types' => array('user'),
+            'hookup'       => true,
+            'save_fields'  => true,
+        ));
+        $cmb_user->add_field(array(
+            'name'      => 'ID Karyawan',
+            'id'        => $this->prefix . 'id_karyawan',
+            'type'      => 'text',
+            'column'    => true,
+            'repeatable'  => true,
+        ));
+        $cmb_user->add_field(array(
+            'name'    => 'Catatan',
+            'id'      => $this->prefix . 'catatan',
+            'type'    => 'textarea',
+            'attributes' => [
+                'rows' => 2
+            ]
+        ));
+    }
+
     public function register_user_frontend_form()
     {
         $cmb_user = new_cmb2_box(array(
             'id'           => $this->prefix . 'user_frontend_form',
-            'object_types' => array('user'), // Tipe objek adalah 'user'
+            'object_types' => array('user'),
             'hookup'       => true,
-            'save_fields'  => false, // Kami akan menyimpan field secara manual
+            'save_fields'  => true,
         ));
 
         $cmb_user->add_field(array(
             'name'    => 'Nama Lengkap',
-            'id'      => $this->prefix . 'full_name',
+            'id'      => $this->prefix . 'first_name',
             'type'    => 'text',
         ));
 
@@ -71,17 +96,18 @@ class Wp_Nglorok_Profile
 
         $cmb_user->add_field(array(
             'name'    => 'Email',
-            'id'      => $this->prefix . 'email',
+            'id'      => $this->prefix . 'user_email',
             'type'    => 'text_email',
         ));
 
         $cmb_user->add_field(array(
             'name'    => 'Tanggal Masuk',
             'id'      => $this->prefix . 'entry_date',
-            'type'    => 'text',
-            'attributes' => [
-                'type' => 'date'
-            ]
+            'type'    => 'text_date',
+            'date_format' => 'Y-m-d',
+            // 'attributes' => [
+            //     'type' => 'date',
+            // ]
         ));
 
         $cmb_user->add_field(array(
@@ -98,12 +124,7 @@ class Wp_Nglorok_Profile
             'id'      => $this->prefix . 'divisi',
             'type'    => 'select',
             'options' => $this->divisi(),
-        ));
-
-        $cmb_user->add_field(array(
-            'name'    => 'ID Karyawan',
-            'id'      => $this->prefix . 'id_karyawan',
-            'type'    => 'text',
+            'column' => true,
         ));
 
         $cmb_user->add_field(array(
@@ -133,7 +154,11 @@ class Wp_Nglorok_Profile
         }
 
         // Current user
-        $user_id = isset($atts['user_id'])?absint( $atts['user_id'] ):get_current_user_id();
+        if(isset($atts['user_id']) && $atts['user_id']=='new'){
+            $user_id = 'new-object-id';
+        } else {
+            $user_id = isset($atts['user_id'])?absint( $atts['user_id'] ):get_current_user_id();
+        }
 
         // Use ID of metabox in wds_frontend_form_register
         $metabox_id = isset($atts['id']) ? esc_attr($atts['id']) : $this->prefix . 'user_frontend_form';
@@ -203,8 +228,18 @@ class Wp_Nglorok_Profile
         if (empty($_POST)) {
             return false;
         }
+
         // Fetch sanitized values
         $sanitized_values = $cmb->get_sanitized_values($_POST);
+
+        if($sanitized_values['first_name'] && $sanitized_values['user_email'] && $user_id ){
+            $args_user = array(
+                'ID'            => $user_id,
+                'user_email'    => esc_attr( $sanitized_values['user_email'] ),
+                'display_name'  => esc_attr( $sanitized_values['first_name'] ),
+            );
+            wp_update_user( $args_user );
+        }
 
         // Loop through remaining (sanitized) data, and save to user-meta
         foreach ($sanitized_values as $key => $value) {

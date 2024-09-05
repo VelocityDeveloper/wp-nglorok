@@ -17,7 +17,7 @@ class Wp_Nglorok_Defaultdb {
     public function __construct() {
         global $wpdb;
         $this->table_karyawan = $wpdb->prefix . 'karyawan';
-        $this->table_divisi_karyawan = $wpdb->prefix . 'divisi_karyawan';
+        $this->table_divisi_karyawan = $wpdb->prefix . 'wpng_divisi_karyawan';
     }
 
     public function create_table() {
@@ -63,6 +63,7 @@ class Wp_Nglorok_Defaultdb {
             'billing'           => 'Billing',
             'pemilik'           => 'Pemilik',
             'superadmin'        => 'Super Admin',
+            'revisi'            => 'Revisi',
         ];
         foreach ($default_divisi_karyawan as $d => $divisi) {
 
