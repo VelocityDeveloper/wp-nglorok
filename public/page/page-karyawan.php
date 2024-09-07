@@ -61,81 +61,38 @@ class Page_Karyawan {
         ?>
         <h4 class="card-title">Karyawan</h4>
         <div>
-            <table id="table-karyawan" class="table table-striped nowrap">
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>Divisi</th>
-                        <th>HP</th>
-                        <th>Email</th>
-                        <th>Masuk</th>
-                        <th>Alamat</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if($getusers): ?>
-                        <?php foreach( $getusers as $user): ?>
-                            <?php
-                            $user_id    = $user->ID;
-                            $nama       = get_user_meta($user_id,'first_name',true);
-                            $nohp       = get_user_meta($user_id,'number_handphone',true);
-                            $email      = get_user_meta($user_id,'user_email',true);
-                            $entry      = get_user_meta($user_id,'entry_date',true);
-                            $address    = get_user_meta($user_id,'address',true);
-                            $status     = get_user_meta($user_id,'status',true);
-                            $divisi     = get_user_meta($user_id,'divisi',true);
-                            $divisi     = $divisi?$wng_profil->divisi()[$divisi]:'';
-                            
-                            ?>
-                            <tr>
-                                <td>
-                                    <?php echo $nama??'-';?>
-                                </td>
-                                <td>
-                                    <?php echo $divisi??'-';?>
-                                </td>
-                                <td>
-                                    <?php echo $nohp??'-';?>
-                                </td>
-                                <td>
-                                    <?php echo $email??'-';?>
-                                </td>
-                                <td>
-                                    <?php echo $entry??'-';?>
-                                </td>
-                                <td>
-                                    <?php echo $address??'-';?>
-                                </td>
-                                <td>
-                                    <?php echo $status??'-';?>
-                                </td>
-                                <td class="text-end">
-                                    <a href="<?php echo $this->permalink; ?>?pg=edit&id=<?php echo $user_id;?>" title="Edit" class="btn btn-inverse-primary btn-rounded p-2">
+
+            <?php
+            $tb_header  = ['Nama','Divisi','HP','Email','Masuk','Status','Alamat',''];
+            $tb_body    = [];
+            foreach( $getusers as $user){
+
+                $user_id    = $user->ID;
+                $nama       = get_user_meta($user_id,'first_name',true);
+                $nohp       = get_user_meta($user_id,'number_handphone',true);
+                $email      = get_user_meta($user_id,'user_email',true);
+                $entry      = get_user_meta($user_id,'entry_date',true);
+                $address    = get_user_meta($user_id,'address',true);
+                $status     = get_user_meta($user_id,'status',true);
+                $divisi     = get_user_meta($user_id,'divisi',true);
+                $divisi     = $divisi?$wng_profil->divisi()[$divisi]:'';
+                $action     = '<a href="'.$this->permalink.'?pg=edit&id='.$user_id.'" title="Edit" class="btn btn-inverse-primary btn-rounded p-2">
                                         <i class="mdi mdi-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-            <script>
-                jQuery(function($){
-                    $( document ).ready(function() {
-                        new DataTable('#table-karyawan', {
-                            responsive: true,
-                            columnDefs: [
-                                { responsivePriority: 1, targets: 0 },
-                                { responsivePriority: 2, targets: -1 }
-                            ]
-                        });
-                    });
-                });
-            </script>
-        </div>
-        <?php
+                                    </a>';
+
+                $tb_body[] = [
+                    $nama,
+                    $nohp,
+                    $email,
+                    $entry,
+                    $address,
+                    $status,
+                    $divisi,
+                    $action
+                ];
+            }
+            $table  = new Wp_Nglorok_Table('tablekaryawan',$tb_header,$tb_body);
+            echo $table->render();
     }
 
 }
