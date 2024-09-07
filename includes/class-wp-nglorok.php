@@ -146,6 +146,7 @@ class Wp_Nglorok {
 		 * The class to load all components
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/components/class-wp-nglorok-modal.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/components/class-wp-nglorok-card.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/components/class-wp-nglorok-table.php';
 
 		$this->loader = new Wp_Nglorok_Loader();
