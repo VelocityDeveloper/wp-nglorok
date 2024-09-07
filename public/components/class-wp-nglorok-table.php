@@ -20,7 +20,7 @@ class Wp_Nglorok_Table {
 
     public function render(){        
         ?>
-        <div>
+        <div class="wp-nglorok-table">
             
             <table id="<?php echo $this->id; ?>" class="table table-striped nowrap">
                 <thead>

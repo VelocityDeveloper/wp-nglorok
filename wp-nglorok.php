@@ -16,7 +16,7 @@
  * Plugin Name:       WP Nglorok
  * Plugin URI:        https://velocitydeveloper.com
  * Description:       Management Project Velocity
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Velocity Developer
  * Author URI:        https://velocitydeveloper.com/
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WP_NGLOROK_VERSION', '1.0.0' );
+define( 'WP_NGLOROK_VERSION', '1.0.1' );
 define( 'WP_NGLOROK_PLUGIN_DIR', plugin_dir_path(__FILE__) );
 define( 'WP_NGLOROK_PLUGIN_URL', plugin_dir_url(__FILE__) );
 

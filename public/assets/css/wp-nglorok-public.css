@@ -15,3 +15,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.dtr-expanded > th.dtr-control:
 select.form-select {
     min-width: 60px;
 }
+
+@media(max-width: 560px){
+    .wp-nglorok-table {
+        overflow: scroll;
+    }
+}
