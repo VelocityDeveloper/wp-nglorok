@@ -64,6 +64,7 @@ class Wp_Nglorok_Defaultdb {
             'pemilik'           => 'Pemilik',
             'superadmin'        => 'Super Admin',
             'revisi'            => 'Revisi',
+            'advertiser'        => 'Advertiser',
         ];
         foreach ($default_divisi_karyawan as $d => $divisi) {
 
