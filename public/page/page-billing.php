@@ -14,7 +14,7 @@ class Page_Billing {
     public function __construct() {
         $this->dari = $_GET['dari'] ?? '';
         $this->sampai = $_GET['sampai'] ?? '';
-        add_shortcode('page-billing', array($this, 'render_page')); // [billing-data]
+        add_shortcode('page_billing', array($this, 'render_page')); // [billing-data]
     }
 
     public function header() {
