@@ -12,15 +12,13 @@ class Wp_Nglorok_Modal {
     private $id;
     private $title;
     private $body;
-    private $primaryButtonText;
-    private $secondaryButtonText;
+    private $footer;
 
-    public function __construct($id, $title, $body, $primaryButtonText = 'Understood', $secondaryButtonText = 'Close') {
+    public function __construct($id, $title, $body, $footer) {
         $this->id = $id;
         $this->title = $title;
         $this->body = $body;
-        $this->primaryButtonText = $primaryButtonText;
-        $this->secondaryButtonText = $secondaryButtonText;
+        $this->footer = $footer;
     }
 
     /**
@@ -48,8 +46,7 @@ class Wp_Nglorok_Modal {
                         <?php echo $this->body; ?>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $this->secondaryButtonText; ?></button>
-                        <button type="button" class="btn btn-primary"><?php echo $this->primaryButtonText; ?></button>
+                        
                     </div>
                 </div>
             </div>

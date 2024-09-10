@@ -17,18 +17,14 @@ class Page_Billing {
         add_shortcode('page_billing', array($this, 'render_page')); // [billing-data]
     }
 
-    public function header() {
+    public function before_card() {
         ob_start();
-        $modal_filter_date = new Wp_Nglorok_Modal('filterDateModal', 'Tanggal Masuk', $this->form_filter_date(), false, 'Tutup');
+        $modal_filter_date = new Wp_Nglorok_Modal('filterDateModal', 'Tanggal Masuk', $this->form_filter_date(), '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>');
         ?>
         
         <div class="d-flex justify-content-between mb-2">
-            <h1 class="h2">Billing Data</h1>
             <div class="d-flex">
                 <?php echo $modal_filter_date->render(); ?>
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#filterJenisModal">
-                    <i class="fa fa-filter" aria-hidden="true"></i> Filter
-                </button>
             </div>
         </div>
         <?php
@@ -57,72 +53,37 @@ class Page_Billing {
         ";
         $results = $wpdb->get_results($query, ARRAY_A);
         ob_start();
-        ?>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                        <th>No</th>
-                        <th>Jenis</th>
-                        <th>Nama Web</th>
-                        <th>Paket</th>
-                        <th>Deskripsi</th>
-                        <th>Trf</th>
-                        <th>Masuk Tanggal</th>
-                        <th>Deadline Tanggal</th>
-                        <th>Total Biaya</th>
-                        <th>Dibayar</th>
-                        <th>Kurang</th>
-                        <th>Saldo</th>
-                        <th>HP</th>
-                        <th>Telegram</th>
-                        <th>HP ads</th>
-                        <th>WA</th>
-                        <th>Email</th>
-                        <th>Dikerjakan Oleh</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($results as $value) { ?>
-                    <tr>
-                        <td style="font-size:12px;text-align:center;"><input class="tanda" type="checkbox" kode=""></td>
-                        <td><?php echo $value['jenis']; ?></td>
-                        <td><?php echo $value['nama_web']; ?></td>
-                        <td><?php echo $value['paket']; ?></td>
-                        <td><?php echo $value['deskripsi']; ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['trf']); ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_dmonY($value['tgl_masuk']); ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_dmonY($value['tgl_deadline']); ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya']); ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['dibayar']); ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['biaya'] - $value['dibayar']); ?>
-                        </td>
-                        <td><?php echo Wp_Nglorok_Helpers::convert_to_rupiah($value['saldo']); ?></td>
-                        <td><?php echo $value['hp']; ?></td>
-                        <td><?php echo $value['telegram']; ?></td>
-                        <td><?php echo $value['hpads']; ?></td>
-                        <td><?php echo $value['wa']; ?></td>
-                        <td><?php echo $value['email']; ?></td>
-                        <td><?php echo Wp_Nglorok_Helpers::get_user_names($value['dikerjakan_oleh']); ?></td>
-                        <td>
-                            <a href="index.php?pg=billing&amp;ac=edit&amp;id=<?php echo $value['id']; ?>'"
-                                class="btn btn-primary btn-sm text-white"><i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
-                            <button class="btn btn-danger btn-sm text-white" type="submit"><i class="fa fa-trash"
-                                    aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </div>
-        <?php
+        $tb_header  = ['No','Jenis','Nama Web','Paket','Deskripsi','Trf','Masuk Tgl','Deadline Tgl','Total Biaya','Dibayar','Kurang','Saldo','HP','Telegram','HP ads','WA','Email','Dikerjakan Oleh',''];
+        $tb_body    = [];
+        foreach ($results as $row) {
+            $tb_body[] = [
+                $row['id'],
+                $row['jenis'],
+                $row['nama_web'],
+                $row['paket'],
+                $row['deskripsi'],
+                Wp_Nglorok_Helpers::convert_to_rupiah($row['trf']),
+                Wp_Nglorok_Helpers::convert_to_dmonY($row['tgl_masuk']),
+                Wp_Nglorok_Helpers::convert_to_dmonY($row['tgl_deadline']),
+                Wp_Nglorok_Helpers::convert_to_rupiah($row['biaya']),
+                Wp_Nglorok_Helpers::convert_to_rupiah($row['dibayar']),
+                Wp_Nglorok_Helpers::convert_to_rupiah($row['dibayar'] - $row['biaya']),
+                Wp_Nglorok_Helpers::convert_to_rupiah($row['saldo']),
+                $row['hp'],
+                $row['telegram'],
+                $row['hpads'],
+                $row['wa'],
+                $row['email'],
+                $row['dikerjakan_oleh'],
+                '<a href="#" class="btn btn-sm btn-primary" title="Edit"><i class="mdi mdi-pencil"></i></a>'
+            ];
+        }
+        $table  = new Wp_Nglorok_Table('tablekaryawan',$tb_header,$tb_body);
+        echo $table->render();
         return ob_get_clean();
     }
 
-    public function footer(){
+    public function after_card(){
         ob_start();
         ?>
         <?php
@@ -206,9 +167,17 @@ class Page_Billing {
 
     public function render_page(){
         ob_start();
-        echo $this->header();
-        echo $this->content();
-        echo $this->footer();
+        $before_card = $this->before_card();
+        $card_body   = $this->content();
+        $after_card  = $this->after_card();
+        $args = [
+            'before-card'   => $before_card,
+            'card-title'    => 'Billing',
+            'card-body'     => $card_body,
+            'after-card'   => $after_card,
+        ];
+        $card  = new Wp_Nglorok_Card($args);
+        echo $card->render();
         return ob_get_clean();
     }
 }
