@@ -22,8 +22,10 @@ class Wp_Nglorok_Table {
             'id'            => '',
             'header'        => '',
             'body'          => '',
-            'datatables'    => '',
-            'js'            => '',
+            'datatables'    => [
+                'ajax_action'   => '',
+                'ordering'      => 'true',
+            ],
         );
         $this->args = wp_parse_args( $args, $defaults );
 
@@ -34,15 +36,18 @@ class Wp_Nglorok_Table {
         <div class="wp-nglorok-table">
             
             <table id="<?php echo $this->id; ?>" class="table table-striped nowrap">
-                <thead>
-                    <tr>
-                    <?php foreach( $this->header as $th){ ?>
-                        <th>
-                            <?php echo $th; ?>
-                        </th>
-                    <?php } ?>
-                    </tr>
-                </thead>
+                <?php if($this->header): ?>
+                    <thead>
+                        <tr>
+                        <?php foreach( $this->header as $th){ ?>
+                            <th>
+                                <?php echo $th; ?>
+                            </th>
+                        <?php } ?>
+                        </tr>
+                    </thead>
+                <?php endif; ?>
+                <?php if($this->body): ?>
                 <tbody>
                     <?php foreach( $this->body as $tr){ ?>
                         <tr>
@@ -54,52 +59,31 @@ class Wp_Nglorok_Table {
                         </tr>
                     <?php } ?>
                 </tbody>
+                <?php endif; ?>
             </table>
 
             <script>
                 jQuery(function($){
                     $( document ).ready(function() {
-                        <?php if(!empty($this->args['datatables'])): ?>
-                            <?php
-                            $dt = $this->args['datatables'];
-                            ?>
-                            new DataTable('#<?php echo $this->id; ?>', {
+                        new DataTable('#<?php echo $this->id; ?>', {
+                            responsive: true,
+                            select: true,
+                            stateSave: true,
+                            columnDefs: [
+                                { responsivePriority: 1, targets: 0 },
+                                { responsivePriority: 2, targets: -1 }
+                            ],
+                            ordering: <?php echo $this->args['datatables']['ordering'] ?>,
+                            <?php if(!empty($this->args['datatables']['ajax_action'])): ?>
                                 'processing': true,
                                 'serverSide': true,
                                 'ajax' : {
                                     url: wpnglorok.ajaxUrl,
-                                    // 'type': 'POST',
-                                    data : {action: '<?php echo $dt['ajax_action']; ?>'}
+                                    'type': 'POST',
+                                    data : {action: '<?php echo $this->args['datatables']['ajax_action'] ?>'}
                                 },
-                                columns: [
-                { data: 'RecordID' },
-                { data: 'Name' },
-                { data: 'Email' },
-                { data: 'Company' },
-                { data: 'CreditCardNumber' },
-                { data: 'Datetime' },
-                { data: null },
-            ],
-                            });
-
-                            jQuery.ajax({
-                                type: "POST",
-                                url: wpnglorok.ajaxUrl,
-                                data: { action: '<?php echo $dt['ajax_action']; ?>' },
-                                success: function (respon) {
-                                    console.log(respon);
-                                },
-                            });
-
-                        <?php else: ?>
-                            new DataTable('#<?php echo $this->id; ?>', {
-                                responsive: true,
-                                columnDefs: [
-                                    { responsivePriority: 1, targets: 0 },
-                                    { responsivePriority: 2, targets: -1 }
-                                ]
-                            });
-                        <?php endif; ?>
+                            <?php endif; ?>
+                        });
                     });
                 });
             </script>

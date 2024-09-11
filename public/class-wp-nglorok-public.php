@@ -120,13 +120,13 @@ class Wp_Nglorok_Public {
 		return false;
 
 		$assets_js = [
-			// 'bundle' 				=> 'vendors/js/vendor.bundle.base.js',
+			'bundle' 				=> 'vendors/js/vendor.bundle.base.js',
 			'chart.umd'				=> 'vendors/chart.js/chart.umd.js',
-			'dataTables'			=> 'vendors/datatables/datatables.js',
-			'dataTables-bootstrap5' => 'vendors/datatables/dataTables.bootstrap5.js',
-			'dataTables-responsive' => 'vendors/datatables/dataTables.responsive.js',
-			'responsive-dataTables' => 'vendors/datatables/responsive.dataTables.js',
-			'dataTables-select' 	=> 'js/dataTables.select.min.js',
+			// 'datatablejs'			=> 'vendors/datatables/dataTables.min.js',
+			// 'dataTables-bootstrap5' => 'vendors/datatables/dataTables.bootstrap5.js',
+			// 'dataTables-responsive' => 'vendors/datatables/dataTables.responsive.js',
+			// 'responsive-dataTables' => 'vendors/datatables/responsive.dataTables.js',
+			// 'dataTables-select' 	=> 'js/dataTables.select.min.js',
 			'off-canvas'			=> 'js/off-canvas.js',
 			'template'				=> 'js/template.js',
 			'settings'				=> 'js/settings.js',
@@ -137,6 +137,13 @@ class Wp_Nglorok_Public {
 		foreach ($assets_js as $key => $js_path) {
 			wp_enqueue_script( $this->plugin_name.'-'.$key, plugin_dir_url( __FILE__ ) . 'assets/'.$js_path, array('jquery'), $this->version, false );
 		}
+
+		wp_enqueue_script( 'datatablejs', 'https://cdn.datatables.net/2.1.6/js/dataTables.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'datatablejs.bootstrap5', 'https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'datatablejs.responsive', 'https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'responsive.datatablejs', 'https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'datatablejs.select', 'https://cdn.datatables.net/select/2.0.5/js/dataTables.select.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'select.datatablejs', 'https://cdn.datatables.net/select/2.0.5/js/select.bootstrap5.min.js', array( 'jquery' ), $this->version, false );
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/wp-nglorok-public.js', array( 'jquery' ), $this->version, false );
 
