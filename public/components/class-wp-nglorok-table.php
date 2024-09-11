@@ -11,11 +11,22 @@ class Wp_Nglorok_Table {
     private $id;
     private $header;
     private $body;
+    private $args;
 
-    public function __construct($id, $header,$body) {
+    public function __construct($id, $header,$body,$args=null) {
         $this->id       = $id;
         $this->header   = $header;
         $this->body     = $body;
+     
+        $defaults = array(
+            'id'            => '',
+            'header'        => '',
+            'body'          => '',
+            'datatables'    => '',
+            'js'            => '',
+        );
+        $this->args = wp_parse_args( $args, $defaults );
+
     }
 
     public function render(){        
@@ -48,13 +59,47 @@ class Wp_Nglorok_Table {
             <script>
                 jQuery(function($){
                     $( document ).ready(function() {
-                        new DataTable('#<?php echo $this->id; ?>', {
-                            responsive: true,
-                            columnDefs: [
-                                { responsivePriority: 1, targets: 0 },
-                                { responsivePriority: 2, targets: -1 }
-                            ]
-                        });
+                        <?php if(!empty($this->args['datatables'])): ?>
+                            <?php
+                            $dt = $this->args['datatables'];
+                            ?>
+                            new DataTable('#<?php echo $this->id; ?>', {
+                                'processing': true,
+                                'serverSide': true,
+                                'ajax' : {
+                                    url: wpnglorok.ajaxUrl,
+                                    // 'type': 'POST',
+                                    data : {action: '<?php echo $dt['ajax_action']; ?>'}
+                                },
+                                columns: [
+                { data: 'RecordID' },
+                { data: 'Name' },
+                { data: 'Email' },
+                { data: 'Company' },
+                { data: 'CreditCardNumber' },
+                { data: 'Datetime' },
+                { data: null },
+            ],
+                            });
+
+                            jQuery.ajax({
+                                type: "POST",
+                                url: wpnglorok.ajaxUrl,
+                                data: { action: '<?php echo $dt['ajax_action']; ?>' },
+                                success: function (respon) {
+                                    console.log(respon);
+                                },
+                            });
+
+                        <?php else: ?>
+                            new DataTable('#<?php echo $this->id; ?>', {
+                                responsive: true,
+                                columnDefs: [
+                                    { responsivePriority: 1, targets: 0 },
+                                    { responsivePriority: 2, targets: -1 }
+                                ]
+                            });
+                        <?php endif; ?>
                     });
                 });
             </script>

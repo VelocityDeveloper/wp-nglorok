@@ -120,7 +120,7 @@ class Wp_Nglorok_Public {
 		return false;
 
 		$assets_js = [
-			'bundle' 				=> 'vendors/js/vendor.bundle.base.js',
+			// 'bundle' 				=> 'vendors/js/vendor.bundle.base.js',
 			'chart.umd'				=> 'vendors/chart.js/chart.umd.js',
 			'dataTables'			=> 'vendors/datatables/datatables.js',
 			'dataTables-bootstrap5' => 'vendors/datatables/dataTables.bootstrap5.js',
@@ -139,6 +139,15 @@ class Wp_Nglorok_Public {
 		}
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/wp-nglorok-public.js', array( 'jquery' ), $this->version, false );
+
+		wp_localize_script(
+			$this->plugin_name,
+			'wpnglorok',
+			array(
+				'ajaxUrl'        => admin_url('admin-ajax.php'),
+				'restUrl'        => rest_url(),
+			)
+		);
 
 	}
 
