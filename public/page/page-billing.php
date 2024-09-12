@@ -18,31 +18,21 @@ class Page_Billing {
         add_action('wp_ajax_page_billing', array($this, 'ajax'));
     }
 
-    public function before_card() {
-        ob_start();
-        $modal_filter_date = new Wp_Nglorok_Modal('filterDateModal', 'Tanggal Masuk', $this->form_filter_date(), '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>');
-        ?>
-        
-        <div class="d-flex justify-content-between mb-2">
-            <div class="d-flex">
-                <?php echo $modal_filter_date->render(); ?>
-            </div>
-        </div>
-        <?php
-        return ob_get_clean();
-    }
 
     public function ajax() {
         global $wpdb; // Gunakan $wpdb untuk query ke database WordPress
 
         // Ambil tanggal sekarang
         $date = new DateTime();
-        $sampai = $date->format('Y-m-d');
-        $dari = $date->format('Y-m-01');
 
         $limit = $_POST['length'] ?? 100;
         $offset = $_POST['start'] ?? 0;
-
+        $search = $_POST['search']['value'] ??'';
+        $where = ['WHERE 1=1 '];
+        if ($search && $search != '') {
+            $where[] = 'AND nama_web LIKE "%' . $search . '%"';
+        }
+        $where = $where ?''. implode('', $where) :'';
         // Query ke database menggunakan $wpdb
         $query = "
         SELECT id, {$wpdb->prefix}cs_main_project.id_webhost as id_webhost, jenis, nama_web, deskripsi, trf,
@@ -52,6 +42,7 @@ class Page_Billing {
         ON {$wpdb->prefix}cs_main_project.id_webhost = {$wpdb->prefix}webhost.id_webhost
         INNER JOIN {$wpdb->prefix}paket
         ON {$wpdb->prefix}webhost.id_paket = {$wpdb->prefix}paket.id_paket
+        $where
         ORDER BY {$wpdb->prefix}cs_main_project.tgl_masuk DESC
         LIMIT $limit OFFSET $offset
         ";
@@ -62,6 +53,7 @@ class Page_Billing {
         ON {$wpdb->prefix}cs_main_project.id_webhost = {$wpdb->prefix}webhost.id_webhost
         INNER JOIN {$wpdb->prefix}paket
         ON {$wpdb->prefix}webhost.id_paket = {$wpdb->prefix}paket.id_paket
+        $where
         ORDER BY {$wpdb->prefix}cs_main_project.tgl_masuk DESC
         ";
         $results = $wpdb->get_results($query, ARRAY_A);
@@ -105,7 +97,7 @@ class Page_Billing {
 
             $args = [
                 'id'            => 'tablebilling',
-                'header'        => ['Jenis', 'Nama Web', 'Paket', 'Deskripsi', 'Trf', 'Tgl. Mulai', 'Tgl. Deadline', 'Biaya', 'Dibayar', 'Sisa', 'Saldo', 'Hp', 'Telegram', 'Hpads', 'Wa', 'Email', 'Dikerjakan Oleh', 'Action'],
+                'header'        => ['ID', 'Jenis', 'Nama Web', 'Paket', 'Deskripsi', 'Trf', 'Tgl. Mulai', 'Tgl. Deadline', 'Biaya', 'Dibayar', 'Sisa', 'Saldo', 'Hp', 'Telegram', 'Hpads', 'Wa', 'Email', 'Dikerjakan Oleh', 'Action'],
                 'datatables'    => [
                     'ajax_action'   => 'page_billing',
                     'ordering'      => 'false',
@@ -201,11 +193,10 @@ class Page_Billing {
 
     public function render_page(){
         ob_start();
-        $before_card = $this->before_card();
         $card_body   = $this->content();
         $after_card  = $this->after_card();
         $args = [
-            'before-card'   => $before_card,
+            'before-card'   => '',
             'card-title'    => 'Billing',
             'card-body'     => $card_body,
             'after-card'   => $after_card,

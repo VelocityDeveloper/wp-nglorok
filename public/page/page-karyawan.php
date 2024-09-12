@@ -70,14 +70,16 @@ class Page_Karyawan {
 
     function table(){
         ob_start();
-        
-            $args['datatables'] = [
-                'ajax_action'   => 'page_karyawan',
-                'ordering'      => 'false',
-            ];
 
-            $thead  = ['Nama','No Hp','Email','Masuk','Alamat','Status','Divisi',''];
-            $table  = new Wp_Nglorok_Table('tablekaryawan',$thead,'',$args);
+            $args = [
+                'id'            => 'tablekaryawan',
+                'header'        => ['Nama','No Hp','Email','Masuk','Alamat','Status','Divisi',''],
+                'datatables'    => [
+                    'ajax_action'   => 'page_karyawan',
+                    'ordering'      => 'false',
+                ]
+            ];
+            $table  = new Wp_Nglorok_Table($args);
             echo $table->render();
 
         return ob_get_clean();
@@ -107,6 +109,7 @@ class Page_Karyawan {
                 $before_card .= '<a href="'.$this->permalink.'" title="Kembali ke Daftar Karyawan" class="btn btn-sm btn-outline-primary"><i class="mdi mdi-arrow-left"></i> Kembali</a>';
             }
             $before_card .= '</div>';
+
 
             $args = [
                 'card-title'    => $card_title,
