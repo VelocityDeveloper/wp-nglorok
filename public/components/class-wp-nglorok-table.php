@@ -66,7 +66,7 @@ class Wp_Nglorok_Table {
             <script>
                 jQuery(function($){
                     $( document ).ready(function() {
-                        new DataTable('#<?php echo $this->id; ?>', {
+                        var table = new DataTable('#<?php echo $this->id; ?>', {
                             // responsive: true,
                             responsive: {
                                 details: {
@@ -81,6 +81,7 @@ class Wp_Nglorok_Table {
                                     })
                                 }
                             },
+                            fixedHeader: true,
                             select: true,
                             stateSave: true,
                             columnDefs: [

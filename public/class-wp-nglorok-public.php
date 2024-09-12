@@ -138,12 +138,19 @@ class Wp_Nglorok_Public {
 			wp_enqueue_script( $this->plugin_name.'-'.$key, plugin_dir_url( __FILE__ ) . 'assets/'.$js_path, array('jquery'), $this->version, false );
 		}
 
-		wp_enqueue_script( 'datatablejs', 'https://cdn.datatables.net/2.1.6/js/dataTables.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'datatablejs.bootstrap5', 'https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'datatablejs.responsive', 'https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'responsive.datatablejs', 'https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'datatablejs.select', 'https://cdn.datatables.net/select/2.0.5/js/dataTables.select.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'select.datatablejs', 'https://cdn.datatables.net/select/2.0.5/js/select.bootstrap5.min.js', array( 'jquery' ), $this->version, false );
+		$cdn_js = [
+			'datatablejs'				=> 'https://cdn.datatables.net/2.1.6/js/dataTables.min.js',
+			'datatablejs.bootstrap5'	=> 'https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js',
+			'datatablejs.responsive'	=> 'https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.min.js',
+			'responsive.datatablejs'	=> 'https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.min.js',
+			'datatablejs.select'		=> 'https://cdn.datatables.net/select/2.0.5/js/dataTables.select.min.js',
+			'select.datatablejs'		=> 'https://cdn.datatables.net/select/2.0.5/js/select.bootstrap5.min.js',
+			'datatablejs.fixedHeader'	=> 'https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js',
+			'fixedHeader.datatablejs'	=> 'https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.dataTables.js',
+		];
+		foreach ($cdn_js as $key => $js_url) {
+			wp_enqueue_script( $this->plugin_name.'-'.$key, $js_url, array( 'jquery' ), $this->version, false );
+		}
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/wp-nglorok-public.js', array( 'jquery' ), $this->version, false );
 
@@ -192,8 +199,9 @@ class Wp_Nglorok_Public {
 	// Register Page Shortcode 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-nglorok-admin.php';
 	public function register_page_shortcodes() {
 		$list_pages = [
-			'page-billing' => 'Billing',
-			'page-karyawan' => 'Karyawan',
+			'page-dashboard'	=> 'Dashboard',
+			'page-billing'		=> 'Billing',
+			'page-karyawan'		=> 'Karyawan',
 		];
 		foreach ($list_pages as $key => $value) {
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/page/'.$key.'.php';
