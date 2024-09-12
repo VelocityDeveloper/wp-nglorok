@@ -15,6 +15,7 @@ class Page_Billing {
         $this->dari = $_GET['dari'] ?? '';
         $this->sampai = $_GET['sampai'] ?? '';
         add_shortcode('page_billing', array($this, 'render_page')); // [billing-data]
+        add_action('wp_ajax_page_billing', array($this, 'ajax'));
     }
 
     public function before_card() {
@@ -31,13 +32,16 @@ class Page_Billing {
         return ob_get_clean();
     }
 
-    public function content() {
+    public function ajax() {
         global $wpdb; // Gunakan $wpdb untuk query ke database WordPress
 
         // Ambil tanggal sekarang
         $date = new DateTime();
         $sampai = $date->format('Y-m-d');
         $dari = $date->format('Y-m-01');
+
+        $limit = $_POST['length'] ?? 100;
+        $offset = $_POST['start'] ?? 0;
 
         // Query ke database menggunakan $wpdb
         $query = "
@@ -49,14 +53,22 @@ class Page_Billing {
         INNER JOIN {$wpdb->prefix}paket
         ON {$wpdb->prefix}webhost.id_paket = {$wpdb->prefix}paket.id_paket
         ORDER BY {$wpdb->prefix}cs_main_project.tgl_masuk DESC
-        LIMIT 10
+        LIMIT $limit OFFSET $offset
+        ";
+        $query_total = "
+        SELECT COUNT(*)
+        FROM {$wpdb->prefix}cs_main_project
+        INNER JOIN {$wpdb->prefix}webhost
+        ON {$wpdb->prefix}cs_main_project.id_webhost = {$wpdb->prefix}webhost.id_webhost
+        INNER JOIN {$wpdb->prefix}paket
+        ON {$wpdb->prefix}webhost.id_paket = {$wpdb->prefix}paket.id_paket
+        ORDER BY {$wpdb->prefix}cs_main_project.tgl_masuk DESC
         ";
         $results = $wpdb->get_results($query, ARRAY_A);
-        ob_start();
 
-        $tb_body    = [];
+        $data    = [];
         foreach ($results as $row) {
-            $tb_body[] = [
+            $data[] = [
                 $row['id'],
                 $row['jenis'],
                 $row['nama_web'],
@@ -78,14 +90,29 @@ class Page_Billing {
                 '<a href="#" class="btn btn-sm btn-primary" title="Edit"><i class="mdi mdi-pencil"></i></a>'
             ];
         }
-                
-        $args = [
-            'id'            => 'tablebilling',
-            'header'        => ['No','Jenis','Nama Web','Paket','Deskripsi','Trf','Masuk Tgl','Deadline Tgl','Total Biaya','Dibayar','Kurang','Saldo','HP','Telegram','HP ads','WA','Email','Dikerjakan Oleh','Tindakan'],
-            'body'          => $tb_body,
+        
+        $response = [
+            'draw'              => $_POST['draw'] ?? 1,
+            'recordsTotal'      => $wpdb->get_var($query_total),
+            'recordsFiltered'   => $wpdb->get_var($query_total),
+            'data'              => $data
         ];
-        $table  = new Wp_Nglorok_Table($args);
-        echo $table->render();
+
+        wp_send_json($response);
+    }
+    public function content() {
+        ob_start();
+
+            $args = [
+                'id'            => 'tablebilling',
+                'header'        => ['Jenis', 'Nama Web', 'Paket', 'Deskripsi', 'Trf', 'Tgl. Mulai', 'Tgl. Deadline', 'Biaya', 'Dibayar', 'Sisa', 'Saldo', 'Hp', 'Telegram', 'Hpads', 'Wa', 'Email', 'Dikerjakan Oleh', 'Action'],
+                'datatables'    => [
+                    'ajax_action'   => 'page_billing',
+                    'ordering'      => 'false',
+                ]
+            ];
+            $table  = new Wp_Nglorok_Table($args);
+            echo $table->render();
 
         return ob_get_clean();
     }

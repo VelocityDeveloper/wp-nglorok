@@ -70,16 +70,14 @@ class Page_Karyawan {
 
     function table(){
         ob_start();
-
-            $args = [
-                'id'            => 'tablekaryawan',
-                'header'        => ['Nama','No Hp','Email','Masuk','Alamat','Status','Divisi',''],
-                'datatables'    => [
-                    'ajax_action'   => 'page_karyawan',
-                    'ordering'      => 'false',
-                ]
+        
+            $args['datatables'] = [
+                'ajax_action'   => 'page_karyawan',
+                'ordering'      => 'false',
             ];
-            $table  = new Wp_Nglorok_Table($args);
+
+            $thead  = ['Nama','No Hp','Email','Masuk','Alamat','Status','Divisi',''];
+            $table  = new Wp_Nglorok_Table('tablekaryawan',$thead,'',$args);
             echo $table->render();
 
         return ob_get_clean();
