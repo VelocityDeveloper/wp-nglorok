@@ -74,14 +74,14 @@ class Page_Billing {
                 $row['hpads'],
                 $row['wa'],
                 $row['email'],
-                $row['dikerjakan_oleh'],
+                Wp_Nglorok_Helpers::get_user_names($row['dikerjakan_oleh']),
                 '<a href="#" class="btn btn-sm btn-primary" title="Edit"><i class="mdi mdi-pencil"></i></a>'
             ];
         }
                 
         $args = [
             'id'            => 'tablebilling',
-            'header'        => ['No','Jenis','Nama Web','Paket','Deskripsi','Trf','Masuk Tgl','Deadline Tgl','Total Biaya','Dibayar','Kurang','Saldo','HP','Telegram','HP ads','WA','Email','Dikerjakan Oleh',''],
+            'header'        => ['No','Jenis','Nama Web','Paket','Deskripsi','Trf','Masuk Tgl','Deadline Tgl','Total Biaya','Dibayar','Kurang','Saldo','HP','Telegram','HP ads','WA','Email','Dikerjakan Oleh','Tindakan'],
             'body'          => $tb_body,
         ];
         $table  = new Wp_Nglorok_Table($args);

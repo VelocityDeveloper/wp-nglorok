@@ -61,15 +61,27 @@ class Wp_Nglorok_Helpers {
     public static function get_user_names( string $input ) : string {
         // Pisahkan input berdasarkan koma
         $parts = explode(',', $input);
-		
+		$part = [];
 		foreach ($parts as $key => $value) {
 			// explode 	,10[100] menjadi 10 dan 100
-			$user_id = explode('[', $value)[0];
-			$parts[$key] = $user_id;
+			$id_karyawan = explode('[', $value)[0];
+			$user = get_users(array(
+				'meta_query' => array(
+					array(
+						'key' => 'id_karyawan',
+						'value' => '"'.$id_karyawan.'"',
+						'compare' => 'LIKE',
+					),
+				),
+			));
+			// echo '<pre>'.print_r($user, true).'</pre>';
+			$display_name = $user[0]->display_name ?? '';
+			$part[$key] = $display_name;
 		}
 
         // Gabungkan kembali array menjadi string
-        return implode(',', $parts);
+		$part = array_filter( $part );
+        return implode(',', $part);
     }
 
 }
