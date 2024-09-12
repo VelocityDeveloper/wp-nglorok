@@ -13,10 +13,7 @@ class Wp_Nglorok_Table {
     private $body;
     private $args;
 
-    public function __construct($id, $header,$body,$args=null) {
-        $this->id       = $id;
-        $this->header   = $header;
-        $this->body     = $body;
+    public function __construct($args=null) {
      
         $defaults = array(
             'id'            => '',
@@ -28,6 +25,10 @@ class Wp_Nglorok_Table {
             ],
         );
         $this->args = wp_parse_args( $args, $defaults );
+        
+        $this->id       = $this->args['id'];
+        $this->header   = $this->args['header'];
+        $this->body     = $this->args['body'];
 
     }
 
@@ -66,7 +67,20 @@ class Wp_Nglorok_Table {
                 jQuery(function($){
                     $( document ).ready(function() {
                         new DataTable('#<?php echo $this->id; ?>', {
-                            responsive: true,
+                            // responsive: true,
+                            responsive: {
+                                details: {
+                                    display: DataTable.Responsive.display.modal({
+                                        header: function (row) {
+                                            var data = row.data();
+                                            return 'Details for ' + data[0];
+                                        }
+                                    }),
+                                    renderer: DataTable.Responsive.renderer.tableAll({
+                                        tableClass: 'tablex'
+                                    })
+                                }
+                            },
                             select: true,
                             stateSave: true,
                             columnDefs: [

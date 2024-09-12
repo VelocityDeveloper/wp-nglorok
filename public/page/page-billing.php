@@ -53,7 +53,7 @@ class Page_Billing {
         ";
         $results = $wpdb->get_results($query, ARRAY_A);
         ob_start();
-        $tb_header  = ['No','Jenis','Nama Web','Paket','Deskripsi','Trf','Masuk Tgl','Deadline Tgl','Total Biaya','Dibayar','Kurang','Saldo','HP','Telegram','HP ads','WA','Email','Dikerjakan Oleh',''];
+
         $tb_body    = [];
         foreach ($results as $row) {
             $tb_body[] = [
@@ -78,8 +78,15 @@ class Page_Billing {
                 '<a href="#" class="btn btn-sm btn-primary" title="Edit"><i class="mdi mdi-pencil"></i></a>'
             ];
         }
-        $table  = new Wp_Nglorok_Table('tablekaryawan',$tb_header,$tb_body);
+                
+        $args = [
+            'id'            => 'tablebilling',
+            'header'        => ['No','Jenis','Nama Web','Paket','Deskripsi','Trf','Masuk Tgl','Deadline Tgl','Total Biaya','Dibayar','Kurang','Saldo','HP','Telegram','HP ads','WA','Email','Dikerjakan Oleh',''],
+            'body'          => $tb_body,
+        ];
+        $table  = new Wp_Nglorok_Table($args);
         echo $table->render();
+
         return ob_get_clean();
     }
 
