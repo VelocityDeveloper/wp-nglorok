@@ -201,6 +201,7 @@ class Wp_Nglorok_Public {
 		$list_pages = [
 			'page-dashboard'	=> 'Dashboard',
 			'page-billing'		=> 'Billing',
+			'page-bill-dataweb'	=> 'Database Web',
 			'page-karyawan'		=> 'Karyawan',
 		];
 		foreach ($list_pages as $key => $value) {
