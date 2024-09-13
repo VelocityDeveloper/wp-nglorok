@@ -20,8 +20,12 @@ class Wp_Nglorok_Table {
             'header'        => '',
             'body'          => '',
             'datatables'    => [
-                'ajax_action'   => '',
+                'params'        => '',
                 'ordering'      => 'true',
+                'columnDefs'    => '',
+                'ajax_action'   => '',
+                'ajax_data'     => '',
+                'ajax_reload'   => '',
             ],
         );
         $this->args = wp_parse_args( $args, $defaults );
@@ -32,7 +36,8 @@ class Wp_Nglorok_Table {
 
     }
 
-    public function render(){        
+    public function render(){   
+        ob_start();     
         ?>
         <div class="wp-nglorok-table">
             
@@ -65,7 +70,15 @@ class Wp_Nglorok_Table {
 
             <script>
                 jQuery(function($){
+
+                    function data_ajax(){
+                        var result = 
+
+                        return result;
+                    }
+
                     $( document ).ready(function() {
+
                         var table = new DataTable('#<?php echo $this->id; ?>', {
                             // responsive: true,
                             responsive: {
@@ -86,7 +99,12 @@ class Wp_Nglorok_Table {
                             stateSave: true,
                             columnDefs: [
                                 { responsivePriority: 1, targets: 0 },
-                                { responsivePriority: 2, targets: -1 }
+                                { responsivePriority: 2, targets: -1 },                                
+                                <?php
+                                if(!empty($this->args['datatables']['columnDefs'])):
+                                    echo $this->args['datatables']['columnDefs'];
+                                endif;
+                                ?>
                             ],
                             ordering: <?php echo $this->args['datatables']['ordering'] ?>,
                             <?php if(!empty($this->args['datatables']['ajax_action'])): ?>
@@ -95,16 +113,46 @@ class Wp_Nglorok_Table {
                                 'ajax' : {
                                     url: wpnglorok.ajaxUrl,
                                     'type': 'POST',
-                                    data : {action: '<?php echo $this->args['datatables']['ajax_action'] ?>'}
+                                    data : {
+                                        action: '<?php echo $this->args['datatables']['ajax_action'] ?>',
+                                        <?php
+                                        if(!empty($this->args['datatables']['ajax_data'])):
+                                            foreach ($this->args['datatables']['ajax_data'] as $id_data) {
+                                                echo $id_data.": $('#".$id_data."').val(),";
+                                            }
+                                        endif;
+                                        ?>
+                                    },
                                 },
                             <?php endif; ?>
+                            <?php
+                            if(!empty($this->args['datatables']['params'])):
+                                echo $this->args['datatables']['params'];
+                            endif;
+                            ?>
                         });
+
+                        <?php if(!empty($this->args['datatables']['ajax_reload'])): ?>
+                            $(document).on('click','<?php echo $this->args['datatables']['ajax_reload']; ?>', function(){
+                                table.ajax.reload(null, true);
+                                <?php
+                                if(!empty($this->args['datatables']['ajax_data'])):
+                                    foreach ($this->args['datatables']['ajax_data'] as $id_data) {
+                                        // echo $id_data.": $('#".$id_data."').val(),";
+                                        echo "console.log($('#".$id_data."').val());";
+                                    }
+                                endif;
+                                ?>
+                            });
+                        <?php endif; ?>
+
                     });
                 });
             </script>
             
         </div>
         <?php
+        return ob_get_clean();
     }
 
 }

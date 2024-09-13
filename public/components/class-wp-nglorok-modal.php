@@ -14,11 +14,21 @@ class Wp_Nglorok_Modal {
     private $body;
     private $footer;
 
-    public function __construct($id, $title, $body, $footer) {
-        $this->id = $id;
-        $this->title = $title;
-        $this->body = $body;
-        $this->footer = $footer;
+    public function __construct($args=null) {
+        
+        $defaults = array(
+            'id'            => '',
+            'title'         => 'Modal title',
+            'body'          => '',
+            'footer'        => '',
+            'button-text'   => 'Launch Modal',
+        );
+        $this->args = wp_parse_args( $args, $defaults );
+
+        $this->id       = $this->args['id'];
+        $this->title    = $this->args['title'];
+        $this->body     = $this->args['body'];
+        $this->footer   = $this->args['footer'];
     }
 
     /**
@@ -31,11 +41,11 @@ class Wp_Nglorok_Modal {
         
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<?php echo $this->id; ?>">
-            Launch <?php echo $this->title; ?> modal
+            <?php echo $this->args['button-text']; ?>
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="<?php echo $this->id; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="<?php echo $this->id; ?>Label" aria-hidden="true">
+        <div class="modal fade" id="<?php echo $this->id; ?>" aria-labelledby="<?php echo $this->id; ?>Label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -45,9 +55,11 @@ class Wp_Nglorok_Modal {
                     <div class="modal-body">
                         <?php echo $this->body; ?>
                     </div>
-                    <div class="modal-footer">
-                        
-                    </div>
+                    <?php if($this->footer): ?>
+                        <div class="modal-footer">
+                            
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

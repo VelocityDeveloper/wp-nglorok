@@ -93,6 +93,14 @@ class Wp_Nglorok_Public {
 			wp_enqueue_style( $this->plugin_name.'-'.$key, plugin_dir_url( __FILE__ ) . 'assets/'.$css_path, array(), $this->version, 'all' );
 		}
 
+		// $cdn_css = [
+		// 	'searchPanes.dataTables'	=> 'https://cdn.datatables.net/searchpanes/2.3.2/css/searchPanes.dataTables.css',
+		// ];
+		// foreach ($cdn_css as $key => $css_url) {
+		// 	wp_enqueue_style( $this->plugin_name.'-'.$key,$css_url, array(), $this->version, 'all' );
+
+		// }
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/wp-nglorok-public.css', array(), $this->version, 'all' );
 
 	}
@@ -147,6 +155,8 @@ class Wp_Nglorok_Public {
 			'select.datatablejs'		=> 'https://cdn.datatables.net/select/2.0.5/js/select.bootstrap5.min.js',
 			'datatablejs.fixedHeader'	=> 'https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js',
 			'fixedHeader.datatablejs'	=> 'https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.dataTables.js',
+			// 'datatablejs.searchPanes'	=> 'https://cdn.datatables.net/searchpanes/2.3.2/js/dataTables.searchPanes.js',
+			// 'searchPanes.datatablejs'	=> 'https://cdn.datatables.net/searchpanes/2.3.2/js/searchPanes.dataTables.js',
 		];
 		foreach ($cdn_js as $key => $js_url) {
 			wp_enqueue_script( $this->plugin_name.'-'.$key, $js_url, array( 'jquery' ), $this->version, false );
