@@ -69,85 +69,77 @@ class Wp_Nglorok_Table {
             </table>
 
             <script>
-                jQuery(function($){
-
-                    function data_ajax(){
-                        var result = 
-
-                        return result;
-                    }
-
-                    $( document ).ready(function() {
-
-                        var table = new DataTable('#<?php echo $this->id; ?>', {
-                            // responsive: true,
-                            responsive: {
-                                details: {
-                                    display: DataTable.Responsive.display.modal({
-                                        header: function (row) {
-                                            var data = row.data();
-                                            return 'Details for ' + data[0];
+            jQuery(function($) {
+                function initDataTable() {
+                    return new DataTable('#<?php echo $this->id; ?>', {
+                        responsive: {
+                            details: {
+                                display: DataTable.Responsive.display.modal({
+                                    header: function(row) {
+                                        var data = row.data();
+                                        return 'Details for ' + data[0];
+                                    }
+                                }),
+                                renderer: DataTable.Responsive.renderer.tableAll({
+                                    tableClass: 'tablex'
+                                })
+                            }
+                        },
+                        fixedHeader: true,
+                        select: true,
+                        stateSave: true,
+                        columnDefs: [
+                            { responsivePriority: 1, targets: 0 },
+                            { responsivePriority: 2, targets: -1 },
+                            <?php
+                            if (!empty($this->args['datatables']['columnDefs'])) {
+                                echo $this->args['datatables']['columnDefs'];
+                            }
+                            ?>
+                        ],
+                        ordering: <?php echo $this->args['datatables']['ordering'] ?>,
+                        <?php if (!empty($this->args['datatables']['ajax_action'])): ?>
+                            processing: true,
+                            serverSide: true,
+                            ajax: {
+                                url: wpnglorok.ajaxUrl,
+                                type: 'POST',
+                                data: function(d) {
+                                    d.action = '<?php echo $this->args['datatables']['ajax_action'] ?>';
+                                    <?php
+                                    if (!empty($this->args['datatables']['ajax_data'])) {
+                                        foreach ($this->args['datatables']['ajax_data'] as $id_data) {
+                                            echo "d.$id_data = $('#$id_data').val();";
                                         }
-                                    }),
-                                    renderer: DataTable.Responsive.renderer.tableAll({
-                                        tableClass: 'tablex'
-                                    })
+                                    }
+                                    ?>
                                 }
                             },
-                            fixedHeader: true,
-                            select: true,
-                            stateSave: true,
-                            columnDefs: [
-                                { responsivePriority: 1, targets: 0 },
-                                { responsivePriority: 2, targets: -1 },                                
-                                <?php
-                                if(!empty($this->args['datatables']['columnDefs'])):
-                                    echo $this->args['datatables']['columnDefs'];
-                                endif;
-                                ?>
-                            ],
-                            ordering: <?php echo $this->args['datatables']['ordering'] ?>,
-                            <?php if(!empty($this->args['datatables']['ajax_action'])): ?>
-                                'processing': true,
-                                'serverSide': true,
-                                'ajax' : {
-                                    url: wpnglorok.ajaxUrl,
-                                    'type': 'POST',
-                                    data : {
-                                        action: '<?php echo $this->args['datatables']['ajax_action'] ?>',
-                                        <?php
-                                        if(!empty($this->args['datatables']['ajax_data'])):
-                                            foreach ($this->args['datatables']['ajax_data'] as $id_data) {
-                                                echo $id_data.": $('#".$id_data."').val(),";
-                                            }
-                                        endif;
-                                        ?>
-                                    },
-                                },
-                            <?php endif; ?>
-                            <?php
-                            if(!empty($this->args['datatables']['params'])):
-                                echo $this->args['datatables']['params'];
-                            endif;
-                            ?>
-                        });
-
-                        <?php if(!empty($this->args['datatables']['ajax_reload'])): ?>
-                            $(document).on('click','<?php echo $this->args['datatables']['ajax_reload']; ?>', function(){
-                                table.ajax.reload(null, true);
-                                <?php
-                                if(!empty($this->args['datatables']['ajax_data'])):
-                                    foreach ($this->args['datatables']['ajax_data'] as $id_data) {
-                                        // echo $id_data.": $('#".$id_data."').val(),";
-                                        echo "console.log($('#".$id_data."').val());";
-                                    }
-                                endif;
-                                ?>
-                            });
                         <?php endif; ?>
-
+                        <?php
+                        if (!empty($this->args['datatables']['params'])) {
+                            echo $this->args['datatables']['params'];
+                        }
+                        ?>
                     });
-                });
+                }
+
+                var table = initDataTable();
+
+                <?php if (!empty($this->args['datatables']['ajax_reload'])): ?>
+                    $(document).on('click', '<?php echo $this->args['datatables']['ajax_reload']; ?>', function() {
+                        table.destroy(); // Destroy the old instance
+                        table = initDataTable(); // Reinitialize with new filters
+                        <?php
+                        if (!empty($this->args['datatables']['ajax_data'])) {
+                            foreach ($this->args['datatables']['ajax_data'] as $id_data) {
+                                echo "console.log($('#$id_data').val());";
+                            }
+                        }
+                        ?>
+                    });
+                <?php endif; ?>
+            });
             </script>
             
         </div>
