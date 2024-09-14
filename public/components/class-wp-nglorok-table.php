@@ -1,6 +1,6 @@
 <?php
 /**
- * Modal Component for dataTable Bootstrap 5.
+ * Table Component for Bootstrap 5.
  *
  * @package    Wp_Nglorok
  * @subpackage Wp_Nglorok/includes/components
@@ -13,8 +13,14 @@ class Wp_Nglorok_Table {
     private $body;
     private $args;
 
-    public function __construct($args=null) {
-     
+    /**
+     * Constructor to initialize the table component with arguments.
+     *
+     * @param array|null $args Arguments for customizing the table component.
+     */
+    public function __construct($args = null) {
+
+        // Default values for the table component
         $defaults = array(
             'id'            => '',
             'header'        => '',
@@ -28,50 +34,52 @@ class Wp_Nglorok_Table {
                 'ajax_reload'   => '',
             ],
         );
-        $this->args = wp_parse_args( $args, $defaults );
         
-        $this->id       = $this->args['id'];
+        // Parse the provided arguments with the defaults
+        $this->args = wp_parse_args($args, $defaults);
+
+        $this->id       = esc_attr($this->args['id']);
         $this->header   = $this->args['header'];
         $this->body     = $this->args['body'];
-
     }
 
-    public function render(){   
-        ob_start();     
+    /**
+     * Render the table component.
+     *
+     * @return string The HTML output of the table component.
+     */
+    public function render() {
+        ob_start();
         ?>
         <div class="wp-nglorok-table">
-            
-            <table id="<?php echo $this->id; ?>" class="table table-striped nowrap">
-                <?php if($this->header): ?>
+            <table id="<?php echo esc_attr($this->id); ?>" class="table table-striped nowrap">
+                <?php if (!empty($this->header)): ?>
                     <thead>
                         <tr>
-                        <?php foreach( $this->header as $th){ ?>
-                            <th>
-                                <?php echo $th; ?>
-                            </th>
-                        <?php } ?>
+                            <?php foreach ($this->header as $th): ?>
+                                <th><?php echo esc_html($th); ?></th>
+                            <?php endforeach; ?>
                         </tr>
                     </thead>
                 <?php endif; ?>
-                <?php if($this->body): ?>
-                <tbody>
-                    <?php foreach( $this->body as $tr){ ?>
-                        <tr>
-                            <?php foreach( $tr as $td){ ?>
-                                <td>
-                                    <?php echo $td; ?>
-                                </td>
-                            <?php } ?>
-                        </tr>
-                    <?php } ?>
-                </tbody>
+                
+                <?php if (!empty($this->body)): ?>
+                    <tbody>
+                        <?php foreach ($this->body as $tr): ?>
+                            <tr>
+                                <?php foreach ($tr as $td): ?>
+                                    <td><?php echo esc_html($td); ?></td>
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
                 <?php endif; ?>
             </table>
-
-            <script>
+        </div>
+        <script>
             jQuery(function($) {
                 function initDataTable() {
-                    return new DataTable('#<?php echo $this->id; ?>', {
+                    return new DataTable('#<?php echo esc_js($this->id); ?>', {
                         responsive: {
                             details: {
                                 display: DataTable.Responsive.display.modal({
@@ -97,24 +105,24 @@ class Wp_Nglorok_Table {
                             }
                             ?>
                         ],
-                        ordering: <?php echo $this->args['datatables']['ordering'] ?>,
+                        ordering: <?php echo esc_js($this->args['datatables']['ordering']); ?>,
                         <?php if (!empty($this->args['datatables']['ajax_action'])): ?>
-                            processing: true,
-                            serverSide: true,
-                            ajax: {
-                                url: wpnglorok.ajaxUrl,
-                                type: 'POST',
-                                data: function(d) {
-                                    d.action = '<?php echo $this->args['datatables']['ajax_action'] ?>';
-                                    <?php
-                                    if (!empty($this->args['datatables']['ajax_data'])) {
-                                        foreach ($this->args['datatables']['ajax_data'] as $id_data) {
-                                            echo "d.$id_data = $('#$id_data').val();";
-                                        }
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: wpnglorok.ajaxUrl,
+                            type: 'POST',
+                            data: function(d) {
+                                d.action = '<?php echo esc_js($this->args['datatables']['ajax_action']); ?>';
+                                <?php
+                                if (!empty($this->args['datatables']['ajax_data'])) {
+                                    foreach ($this->args['datatables']['ajax_data'] as $id_data) {
+                                        echo "d.$id_data = $('#" . esc_js($id_data) . "').val();";
                                     }
-                                    ?>
                                 }
-                            },
+                                ?>
+                            }
+                        },
                         <?php endif; ?>
                         <?php
                         if (!empty($this->args['datatables']['params'])) {
@@ -127,24 +135,14 @@ class Wp_Nglorok_Table {
                 var table = initDataTable();
 
                 <?php if (!empty($this->args['datatables']['ajax_reload'])): ?>
-                    $(document).on('click', '<?php echo $this->args['datatables']['ajax_reload']; ?>', function() {
+                    $(document).on('click', '<?php echo esc_js($this->args['datatables']['ajax_reload']); ?>', function() {
                         table.destroy(); // Destroy the old instance
                         table = initDataTable(); // Reinitialize with new filters
-                        <?php
-                        if (!empty($this->args['datatables']['ajax_data'])) {
-                            foreach ($this->args['datatables']['ajax_data'] as $id_data) {
-                                echo "console.log($('#$id_data').val());";
-                            }
-                        }
-                        ?>
                     });
                 <?php endif; ?>
             });
-            </script>
-            
-        </div>
+        </script>
         <?php
         return ob_get_clean();
     }
-
 }
