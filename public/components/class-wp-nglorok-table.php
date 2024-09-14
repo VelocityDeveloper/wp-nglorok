@@ -80,6 +80,7 @@ class Wp_Nglorok_Table {
             jQuery(function($) {
                 function initDataTable() {
                     return new DataTable('#<?php echo esc_js($this->id); ?>', {
+                        autoWidth: false, // Disable automatic column width calculation
                         responsive: {
                             details: {
                                 display: DataTable.Responsive.display.modal({
@@ -136,6 +137,7 @@ class Wp_Nglorok_Table {
 
                 <?php if (!empty($this->args['datatables']['ajax_reload'])): ?>
                     $(document).on('click', '<?php echo esc_js($this->args['datatables']['ajax_reload']); ?>', function() {
+                        table.state.clear();
                         table.destroy(); // Destroy the old instance
                         table = initDataTable(); // Reinitialize with new filters
                     });
